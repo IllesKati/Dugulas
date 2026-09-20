@@ -5,15 +5,13 @@
 }
 
 body {
-    background-image: url(hatter1.jpg);
-    background-repeat: repeat;
+    background: linear-gradient(180deg, #2b2b2b 0%, #3a3a3a 100%);
     background-attachment: fixed;
-    background-size: cover;
 }
 
 @media (max-width: 768px) {
     body {
-        background-size: cover;
+        background-attachment: fixed;
     }
 }
 
@@ -72,6 +70,14 @@ body {
     width: 100%;
     display: flex;
 
+}
+
+/* Logo */
+.logo-img {
+    width: 44px;
+    height: 44px;
+    display: block;
+    flex-shrink: 0;
 }
 
 .nav-links {
@@ -136,8 +142,8 @@ body {
 @media (max-width:768px) {
     .navbar img {
         width: 40px;
-        height: 45px;
-        padding: 5px;
+        height: 40px;
+        padding: 3px;
         display: block;
     }
 }
@@ -414,7 +420,11 @@ p {
 
     .tips li {
         font-size: 14px;
-        color: rgb(242, 120, 12);
+        color: white;
+    }
+
+    .tipp-cim {
+        font-size: 14px;
     }
 }
 
@@ -427,18 +437,6 @@ p {
 .tipp-cim {
     color: rgb(242, 120, 12);
     font-weight: bold;
-}
-
-@media (max-width: 768px) {
-    .tipp-cim {
-        font-size: 14px;
-        color: rgb(242, 120, 12);
-    }
-
-    .tips li {
-        font-size: 14px;
-        color: white;
-    }
 }
 
 .icon-orange {
@@ -609,6 +607,12 @@ p {
     margin-bottom: 50px;
 }
 
+/* Szekciócímek ("Szolgáltatások", "Árak") narancssárgán */
+#szolgaltatasok h2.caveat,
+#arak h2.caveat {
+    color: #f2780c;
+}
+
 /* Card */
 .card-group {
     width: 80%;
@@ -651,6 +655,12 @@ p {
 
     }
 
+    .card {
+        min-height: auto;
+        max-height: none;
+        overflow: visible;
+    }
+
     .card-text {
         font-size: 13px;
     }
@@ -687,6 +697,56 @@ h2 {
     margin-top: 30px;
 }
 
+/* Települések accordion – sötét téma, hogy illeszkedjen az oldalhoz */
+#telepulesek .accordion {
+    --bs-accordion-bg: #0e0e0e;
+    --bs-accordion-color: #f5f5f5;
+    --bs-accordion-border-color: #2a2a2a;
+    --bs-accordion-btn-color: #f5f5f5;
+    --bs-accordion-btn-bg: #1a1a1a;
+    --bs-accordion-active-color: #ffffff;
+    --bs-accordion-active-bg: #0e0e0e;
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 0.2rem rgba(242, 120, 12, 0.35);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#telepulesek .accordion-item {
+    background-color: #0e0e0e;
+    border: 1px solid #2a2a2a;
+}
+
+#telepulesek .accordion-button {
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+    font-family: 'Raleway', serif;
+}
+
+#telepulesek .accordion-button:not(.collapsed) {
+    background-color: rgba(242, 120, 12, 0.18);
+    color: #f2780c;
+}
+
+#telepulesek .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(242, 120, 12, 0.35);
+    border-color: #f2780c;
+}
+
+/* Nyíl színe */
+#telepulesek .accordion-button::after {
+    filter: invert(1) brightness(1.4);
+}
+
+#telepulesek .accordion-button:not(.collapsed)::after {
+    filter: invert(62%) sepia(72%) saturate(1900%) hue-rotate(360deg) brightness(98%) contrast(94%);
+}
+
+#telepulesek .accordion-body {
+    background-color: #0e0e0e;
+    color: #d6d6d6;
+    font-family: 'Raleway', serif;
+}
+
 /* Table */
 .table {
     width: 70%;
@@ -701,15 +761,54 @@ td {
     margin-right: 30px;
     padding: 15px;
     transition: background-color 0.5s;
+    color: #f0f0f0;
+    border-bottom: 1px solid #2a2a2a;
 }
 
-.table tr:hover td {
-    background-color: #a9a8a8;
+/* Fejléc sor */
+.table th {
+    background-color: #121212;
+    color: #f2780c;
+    font-size: 18px;
 }
 
-th:nth-child(even),
-td:nth-child(even) {
-    background-color: rgba(244, 248, 248, 0.725);
+.table tr {
+    background-color: #0e0e0e;
+}
+
+/* Zebra csíkozás */
+.table tr:nth-child(even) td {
+    background-color: #1a1a1a;
+}
+
+/* Sor kiemelése hoverre - kikapcsolva, a sorok háttere fixen sötét marad */
+.table tr:hover td,
+.table tr:hover {
+    background-color: inherit;
+    color: #f0f0f0;
+}
+
+/* Sötét hátterű sorokban (páros sorok, fejléc, lábjegyzet) a szöveg fehér */
+.table td[colspan="2"],
+.table tr:nth-child(even) td {
+    color: #ffffff;
+}
+
+/* 'Az árak tájékoztató jellegűek' lábjegyzet sora */
+.table td[colspan="2"] {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Táblázat fejléc ("Szolgáltatások", "Árak") narancssárgán – a fehér szabály után,
+   hogy biztosan ez érvényesüljön */
+.table th {
+    color: #f2780c;
+}
+
+/* A fejléc 'caveat' címkéi is narancssárgák legyenek */
+.table th.caveat {
+    color: #f2780c;
 }
 
 @media (max-width: 768px) {
@@ -789,7 +888,12 @@ ul {
 }
 
 .footer-logo img {
-    max-width: 200px;
+    max-width: 90px;
+}
+
+.footer-logo .logo-img {
+    width: 70px;
+    height: 70px;
 }
 
 .footer-text p {
@@ -915,4 +1019,15 @@ ul {
 .footer-menu li a {
     font-size: 14px;
     color: #878787;
+}
+
+/* Mobilnezet: hover animacio kikapcsolasa a szolgaltatas-dobozoknal
+   (a fajl vegen, hogy felulirja a korabbi .card-group .card transition szabalyt) */
+@media (max-width: 768px) {
+
+    .card-group .card,
+    .card-group .card:hover {
+        transition: none;
+        transform: none;
+    }
 }

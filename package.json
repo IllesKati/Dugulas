@@ -1,5 +1,6 @@
 {
-  "dependencies": {
-    "@ionic/core": "^7.5.0"
-  }
+  "name": "dugulaselharitas-weboldal",
+  "version": "1.0.0",
+  "description": "Duguláselhárítás bemutató weboldal - statikus HTML/CSS/JS",
+  "private": true
 }
