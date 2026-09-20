@@ -644,6 +644,10 @@ p {
     overflow: hidden;
 }
 
+.card-title {
+    color: #f2780c;
+}
+
 /* Mobile view */
 @media (max-width: 768px) {
     .card-group {
@@ -663,6 +667,10 @@ p {
 
     .card-text {
         font-size: 13px;
+    }
+
+    .card-title {
+        color: #f2780c;
     }
 }
 
