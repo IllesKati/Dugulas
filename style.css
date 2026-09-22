@@ -45,6 +45,9 @@ body {
         max-width: 100%;
         height: 450px;
         top: 0px;
+        /* A fix navbar 50px magas — enelkul a fekete sav
+           rásimul a fekete-fekete talalkozasra (olvashatatlan). */
+        margin-top: 50px;
     }
 }
 
@@ -57,7 +60,9 @@ body {
 
 /* Basic styles */
 .navbar {
-    justify-content: flex-start;
+    /* Asztali nezet: a logo es a menusor egy sorban, kozepre igazitva.
+       A logo tavolsagat a .logo-img margin-right adja. */
+    justify-content: center;
     align-items: center;
     padding: 5px;
     background-color: rgb(9, 9, 9);
@@ -78,6 +83,17 @@ body {
     height: 44px;
     display: block;
     flex-shrink: 0;
+    /* Ne tapadjon a logo kozvetlenul a menu ele. */
+    margin-right: 10px;
+}
+
+/* Asztali nezet: a logo es a menusor tavolsaga kicsit nagyobb, hogy
+   ne olvadjon egybe a fekete savval. A mobil/tablet nezetet nem
+   erinti (azok kulon margin-t kapnak lentebb). */
+@media (min-width: 1025px) {
+    .logo-img {
+        margin-right: 20px;
+    }
 }
 
 .nav-links {
@@ -107,8 +123,9 @@ body {
 @media (min-width: 768px) and (max-width: 1024px) {
     .navbar {
         flex-wrap: wrap;
-        justify-content: flex-start;
-        padding-left: 100px;
+        /* A logo es a menu egy sorban, kozepre igazitva: a logo mar
+           nem abszolut pozicionalt, ezert nem kell a bal padding. */
+        justify-content: center;
         width: 100%;
 
     }
@@ -118,8 +135,10 @@ body {
         height: auto;
         padding: 10px;
         display: block;
-        position: absolute;
-        margin-right: 95%;
+        /* position: absolute volt — igy a logo a menu fole kerult.
+           Normal folyamban marad, a .logo-img margin-right a tavolsag. */
+        position: static;
+        margin-right: 10px;
     }
 
     .navbar-links a {
@@ -145,6 +164,8 @@ body {
         height: 40px;
         padding: 3px;
         display: block;
+        /* A logo kicsit beljebb a bal szeltol. */
+        margin-left: 12px;
     }
 }
 
@@ -162,49 +183,128 @@ body {
     margin: 3px 0;
 }
 
-/* Hamburger menu in mobile view */
+/* ---------------------------------------------------------------
+   Mobilnezet (<= 844px) – a nyitott hamburger-menu
+   A .nav-links ilyenkor NORMAL folyamban jon: a .navbar flex-wrap
+   miatt a menu a logo/hamburger sor ALATT, teljes szelessegben
+   nyilik ki. Igy a menupontok nem takarjak el a szakasz-cimeket,
+   es a lelogo menu nem fedi el a hero-t sem. Osszecsukva a
+   max-height 0, tehat lathatatlan.
+   --------------------------------------------------------------- */
 @media (max-width: 844px) {
     .navbar {
         width: 100%;
+        /* A menu a kovetkezo sorba kerul, a fix navbar ala. */
+        flex-wrap: wrap;
+        /* A globális ertek (center) helyett: a mobil sor balrol indul,
+           a hamburger margin-left:auto-val a jobb szelre kerul. */
+        justify-content: flex-start;
+        overflow: visible;
     }
 
     .hamburger-menu {
         display: flex;
-        margin-left: 60%;
+        /* Korabban 60% volt: a flexbox igy a menut a hamburger MELLE
+           tette, ezert a menupontok a logo mellett/takarva latszottak.
+           Az auto-val a hamburger a sor jobb szelere kerul. */
+        margin-left: auto;
+        margin-right: 5px;
+        padding: 5px;
     }
 
     .nav-links a:hover {
         color: rgb(242, 120, 12);
     }
 
+    /* Korabban margin-left:40% volt: a szovegek jobbra csusztak, es a
+       menupontok egy resze a menun kivulre esett. */
     .nav-links a {
-        margin-left: 40%;
-        font-size: 14px;
+        display: block;
+        margin-left: 0;
+        font-size: 15px;
+        padding: 8px 0;
     }
 
     .nav-links {
+        /* Nem abszolut: a navbar folyamaban, kozvetlenul alatta. */
+        position: static;
+        top: auto;
         width: 100%;
-        max-height: 350px;
-        display: none;
+        max-height: 0;
+        overflow: hidden;
+        display: flex;
         flex-direction: column;
-        position: absolute;
-        top: 45px;
-        background-color: black;
-        padding: 3px;
+        box-sizing: border-box;
+        padding: 0 10px;
+        /* A hatter eleg suru ahhoz, hogy a feher menuszoveg olvashato
+           legyen, de kissé attetszo: a mögotte levo kep dereng at.
+           A blur() egesziti ki az attetszest. */
+        background-color: rgba(9, 9, 9, 0.92);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
         line-height: 1.2;
-        transition: max-height 0.3s ease-in-out;
-        z-index: 3;
+        border-top: 0 solid transparent;
+        transition: max-height 0.3s ease-in-out,
+            padding 0.3s ease-in-out,
+            border-top-width 0.3s ease-in-out;
     }
 
     .nav-links.active {
-        display: flex;
         max-height: 350px;
+        padding: 8px 10px 14px 10px;
+        border-top-width: 1px;
+        border-top-color: rgba(255, 255, 255, 0.15);
     }
 
-    .nav-links li:hover {
-        border-bottom: 2px solid rgb(242, 120, 12);
+    .nav-links li {
+        margin-right: 0;
+        padding: 2px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    .nav-links li:last-child {
+        border-bottom: none;
+    }
+
+    /* A menupontok alatti szakaszok cime ne csusszon a fix navbar
+       ala, igy a kattintas utan a cim is latszik. */
+    #rolunk,
+    #szolgaltatasok,
+    #telepulesek,
+    #arak,
+    #kapcsolat {
+        scroll-margin-top: 110px;
+    }
+
+    /* Nyitott allapotban a hamburger X-et mutat (a 3 sav osszefordul).
+       A 9px eltolas = 3px savmagassag + 2*3px margo, igy a szelek
+       pontosan a kozepso vonalra ulnek, mielott elfordulnak. */
+    .hamburger-menu .bar {
+        transition: transform 0.3s ease, opacity 0.2s ease, background-color 0.3s ease;
+    }
+
+    .hamburger-menu.active .bar {
+        background-color: rgb(242, 120, 12);
+    }
+
+    .hamburger-menu.active .bar:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+
+    .hamburger-menu.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-menu.active .bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+
+    /* A "Hívjon most!" gomb mobilon normal menupontkent viselkedik,
+       nem nyulik tul a menün. A meret/stilus a kozos szabalynal van;
+       itt csak a kozepre igazitas es a fuggoleges tavolsag kell. */
+    .nav-links a.btn-primary {
+        margin: 8px auto;
+    }
 }
 
 #rolunk {
@@ -233,7 +333,9 @@ body {
 #rolunk h1 {
     font-family: Dosis, Arial, Helvetica, sans-serif;
     text-shadow: 0 0 5px grey;
-    margin-top: 25px;
+    /* Asztali/tablet nezet: a cim kicsit lejjebb, ne erjen a
+       navbar savjahoz. Mobilon lentebb felulirva (margin-top: 10px). */
+    margin-top: 60px;
     margin-bottom: 5px;
     color: white;
     font-size: 25px;
@@ -254,22 +356,36 @@ body {
     border-top-right-radius: 50px;
     border-bottom-left-radius: 50px;
     line-height: 1.8;
-    margin-top: 5px;
+    /* Asztali/tablet nezet: a cim es a szovegdoboz kozott is legyen
+       levegotartalom. Mobilon lentebb felulirva (margin-top: 10px). */
+    margin-top: 35px;
 }
 
 .call {
     font-size: 25px;
     font-family: monospace;
     font-weight: bold;
-    color: black;
-    text-shadow: 1px 1px 2px rgb(113, 179, 245), 5px 0 40px rgb(245, 245, 248), 0 0 5px rgb(249, 249, 252);
+    /* A kártya háttere nem garantált (világos bútorzat vs. sötét),
+       ezért saját sötét hátteret és narancssárga szöveget kap —
+       így minden nézetben és háttéren olvasható. Ez a stílus
+       korábban csak a mobilnézetben (@media max-width:768px) volt. */
+    display: inline-block;
+    color: #ffb266;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-shadow: none;
 }
 
 /* Mobile view */
 @media (max-width: 768px) {
     #rolunk {
         max-width: 80%;
-        height: 520px;
+        /* min-height, nem height: hosszabb szoveg eseten a doboz
+           nottni tud, igy a szoveg nem log ki belole. (A fix 520px
+           es a benne levo position:absolute <p> egyutt okozta.) */
+        min-height: 520px;
+        height: auto;
         z-index: 2;
         position: absolute;
         /*background-color: rgba(249, 248, 246, 0.939);*/
@@ -287,7 +403,10 @@ body {
     #rolunk p {
         max-width: 100%;
         display: block;
-        position: absolute;
+        /* NEM absolute: abszolut pozicionalva a doboz nem "latja" a
+           szoveg magassagat, ezert min-height eseten sem none a
+           konténer. Normal folyamban a doboz koveti a tartalmat. */
+        position: relative;
         font-size: 14px;
         line-height: 1.5;
         margin-top: 10px;
@@ -306,14 +425,17 @@ body {
         font-size: 14px;
         position: relative;
         margin-top: 10px;
+        /* A favilagos "caveat" cim itt 14px-re kicsinyul, és a feher
+           lathato szoveg elvesznenek; a hatter is sötét. */
+        color: white;
     }
 
+    /* A szoveg egysoros maradjon: a .call kozos stilusat (narancssarga
+       szoveg + fekete hatter) orokli, itt csak a meret valtozik. */
     .call {
         font-size: 16px;
         margin-bottom: 10px;
         font-family: monospace;
-        color: black;
-        text-shadow: 1px 1px 2px rgb(113, 179, 245), 5px 0 55px rgb(245, 245, 248), 0 0 5px rgb(249, 249, 252);
     }
 }
 
@@ -339,7 +461,10 @@ body {
 
     #rolunk {
         width: 75%;
-        height: 820px;
+        /* min-height: a doboz hosszabb tartalom eseten nottni tud,
+           de a pozicionalas (absolute + top) valtozatlan marad. */
+        min-height: 820px;
+        height: auto;
         top: 55px;
     }
 
@@ -357,8 +482,8 @@ body {
     }
 
     #rolunk .call {
-        top: 90%;
         display: block;
+        margin-top: 10px;
     }
 
 }
@@ -607,10 +732,69 @@ p {
     margin-bottom: 50px;
 }
 
-/* Szekciócímek ("Szolgáltatások", "Árak") narancssárgán */
+/* Szekciócímek ("Szolgáltatások", "Árak") narancssárgán.
+   Az Árak horgony (#arak) es a tartalom kulon elem, mert a cim
+   ele kattintva a fix navbar eltakarta a cimet. */
 #szolgaltatasok h2.caveat,
-#arak h2.caveat {
+#arak h2.caveat,
+.arak-tartalom h2.caveat {
     color: #f2780c;
+}
+
+/* A #arak egy 0 magassagu horgony-szekcio: a bongeszo ide ugrik, a
+   scroll-margin-top pedig a fix navbar (50px) ala teszi a cimet.
+   Savertek nelkul az ugras a cim ELOTT all meg, a cim igy lathato. */
+#arak {
+    scroll-margin-top: 60px;
+}
+
+/* Horgony-ugras asztali es tablet nezetben: a menupontra kattintva a
+   szekcio cime ne csusszon a fix navbar (63px) ala. A 80px = a navbar
+   magassaga + 17px termeszetes terkoz, igy a cim es a dobozok is jol
+   lathatoak. (Mobilon a lentebbi 110px-es szabaly ervenyesul.) */
+#szolgaltatasok,
+#telepulesek {
+    scroll-margin-top: 80px;
+}
+
+/* A horgony es a tartalom kozott ne legyen plusz res. */
+.arak-tartalom h2 {
+    margin-top: 0;
+}
+
+/* A "Hívjon most!" gomb minden nezetben ugyanaz: narancs, kompakt
+   meret, lekerekitett. Az asztali nezet korabban a Bootstrap nagy
+   btn-primary meretet hasznalta, ezert eltért a mobilnézettol. */
+.nav-links a.btn-primary {
+    background-color: rgb(242, 120, 12);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 14px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.nav-links a.btn-primary:hover {
+    background-color: #d0660a;
+    border-color: #d0660a;
+    color: #fff;
+}
+
+/* Sosem viragozunk vizszintesen: a dekoracios cimek hosszu szavai
+   mobilon is tördelhetoek legyenek. */
+#rolunk h1,
+#rolunk p,
+.tips h1,
+.tips p,
+.tips li,
+.card-title,
+.card-text {
+    overflow-wrap: break-word;
 }
 
 /* Card */
@@ -648,6 +832,17 @@ p {
     color: #f2780c;
 }
 
+/* A kartyakep egseges merete: a kulonbozo kepek kulonbozo
+   magassaga miatt a harom kartya szovege elcsuszt egymastol.
+   object-fit: cover a kepet kitolti, torzitas nelkul (a kilogo
+   resz levagodik), igy a cimek egy vonalban vannak. */
+.card-img-top {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
 /* Mobile view */
 @media (max-width: 768px) {
     .card-group {
@@ -663,6 +858,12 @@ p {
         min-height: auto;
         max-height: none;
         overflow: visible;
+    }
+
+    /* Mobilon a kep is kisebb: a 260px tul sok lenne egy
+       egyoszlopos listaban. */
+    .card-img-top {
+        height: 200px;
     }
 
     .card-text {
@@ -843,7 +1044,8 @@ td {
    Ezért a táblázat 6px-re kiemelkedik: alatta sötét "hasadék" lesz,
    ami ugyanazt a mélység-érzetet adja, plusz egy fehér szegélyű
    finom derengés a sötét háttéren. */
-#arak .table {
+#arak .table,
+.arak-tartalom .table {
     background-color: #000;
     border: 1px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 6px 4px rgba(0, 0, 0, 0.9),
@@ -1054,4 +1256,10 @@ ul {
         transition: none;
         transform: none;
     }
+}
+
+/* Alkalmazas-szeru viselkedes mobilon: a HTML gorgetes "huszonkettes"
+   hatasat (a teljes oldal megremeg / fekete-fehér villogas) megszunteti. */
+html {
+    overscroll-behavior-y: none;
 }

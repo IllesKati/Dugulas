@@ -82,7 +82,7 @@
 <body>
     <div class="tartalom">
         <header>
-            <nav class="navbar justify-content-center">
+            <nav class="navbar">
                 <img src="logo.svg" class="logo-img" alt="Duguláselhárítás logó" title="Duguláselhárítás logó"
                     width="44" height="44">
                 <div class="hamburger-menu">
@@ -474,7 +474,11 @@
             </section>
         </div>
         <br>
-        <section id="arak">
+        <!-- Az id="arak" szandekosan a cim ELOTT van: a horgony-ugras
+             igy a szakasz tetejere all, a fix navbar ala. (A cimre
+             tett scroll-margin-top mobilon pattogast okozott.) -->
+        <section id="arak"></section>
+        <section class="arak-tartalom">
             <h2 class="caveat">Árak</h2><br><br>
             <table class="table">
                 <tr>
@@ -516,6 +520,7 @@
 
             <br><br><br><br>
         </section>
+        <!-- /arak-tartalom -->
 
 
         <!--Footer-->
